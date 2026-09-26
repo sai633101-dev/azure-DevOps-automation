@@ -1,0 +1,12 @@
+trigger: none   # manual run only
+
+stages:
+- stage: Destroy
+  displayName: "Terraform Destroy"
+  jobs:
+    - job: DestroyJob
+      displayName: "Destroy Azure AVD Resources"
+      pool:
+        vmImage: 'ubuntu-latest'
+      steps:
+        - template: templates/destroy.yml
