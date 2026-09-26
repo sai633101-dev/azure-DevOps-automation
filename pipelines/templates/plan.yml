@@ -1,0 +1,13 @@
+# ------------------------------------------------------------
+# Template: Terraform Plan
+# Generates plan file for review
+# ------------------------------------------------------------
+steps:
+  - script: terraform plan -out=tfplan
+    displayName: 'Terraform Plan'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: 'tfplan'
+      ArtifactName: 'tfplan'
+      publishLocation: 'Container'
