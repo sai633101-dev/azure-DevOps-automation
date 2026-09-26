@@ -1,0 +1,26 @@
+steps:
+  # Install Terraform
+  - task: TerraformInstaller@0
+    inputs:
+      terraformVersion: '1.5.7'
+
+  # Terraform Init with backend config
+  - script: |
+      terraform init -backend-config="storage_account_name=$(storage_account_name)" \
+                     -backend-config="container_name=$(container_name)" \
+                     -backend-config="resource_group_name=$(rg_name)" \
+                     -backend-config="subscription_id=$(AZURE_SUBSCRIPTION_ID)"
+    displayName: 'Terraform Init'
+
+  # Terraform Destroy
+  - script: |
+      terraform destroy -auto-approve \
+        -var rg_name=$(rg_name) \
+        -var location=$(location) \
+        -var hostpool_name=$(hostpool_name) \
+        -var vm_names=$(vm_names) \
+        -var size=$(size) \
+        -var subnet_id=$(subnet_id) \
+        -var admin_username=$(admin_username) \
+        -var admin_password=$(admin_password)
+    displayName: 'Terraform Destroy'
