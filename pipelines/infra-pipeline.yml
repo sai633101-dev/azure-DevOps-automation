@@ -1,0 +1,56 @@
+# ------------------------------------------------------------
+# Azure DevOps Pipeline 1 - Infra Deployment
+# Deploys full AVD infra + 1 default VM
+# ------------------------------------------------------------
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - group: avd-hostpool1-vars   # Variable group with RG, names, creds
+
+stages:
+  - stage: Build
+    jobs:
+      - job: TerraformBuild
+        steps:
+          - task: TerraformInstaller@0
+            inputs:
+              terraformVersion: '1.5.0'
+
+          - script: |
+              terraform init -backend-config="resource_group_name=rg-tfstate-avd" \
+                             -backend-config="storage_account_name=sttfstateavd" \
+                             -backend-config="container_name=tfstate" \
+                             -backend-config="key=$(hostpool_name).tfstate"
+            displayName: 'Terraform Init'
+
+          - script: terraform validate
+            displayName: 'Terraform Validate'
+
+  - stage: Plan
+    jobs:
+      - job: TerraformPlan
+        steps:
+          - script: terraform plan -out=tfplan
+            displayName: 'Terraform Plan'
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: 'tfplan'
+              ArtifactName: 'tfplan'
+              publishLocation: 'Container'
+
+  - stage: Apply
+    jobs:
+      - job: TerraformApply
+        steps:
+          - download: current
+            artifact: tfplan
+
+          - script: terraform apply tfplan
+            displayName: 'Terraform Apply'
