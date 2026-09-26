@@ -1,0 +1,19 @@
+# ------------------------------------------------------------
+# Template: SonarQube Scan (Optional)
+# Runs static analysis on Terraform code
+# ------------------------------------------------------------
+steps:
+  - task: SonarQubePrepare@5
+    inputs:
+      SonarQube: 'SonarQubeServiceConnection'
+      scannerMode: 'CLI'
+      configMode: 'manual'
+      cliProjectKey: 'avd-terraform'
+      cliProjectName: 'AVD Terraform Infra'
+      cliSources: 'terraform'
+
+  - task: SonarQubeAnalyze@5
+
+  - task: SonarQubePublish@5
+    inputs:
+      pollingTimeoutSec: '300'
