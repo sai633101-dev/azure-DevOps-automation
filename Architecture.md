@@ -65,4 +65,4 @@ Code
 
 ✅ With this, your repo now has **code + pipelines + docs + architecture diagram**.  
 
-👉 Sai, next we can polish by adding a **variables file (`variables.tf`)** at root to centralize all inputs (RG na
+
