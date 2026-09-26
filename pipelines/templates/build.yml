@@ -1,0 +1,18 @@
+# ------------------------------------------------------------
+# Template: Terraform Build
+# Installs Terraform and runs init + validate
+# ------------------------------------------------------------
+steps:
+  - task: TerraformInstaller@0
+    inputs:
+      terraformVersion: '1.5.0'
+
+  - script: |
+      terraform init -backend-config="resource_group_name=rg-tfstate-avd" \
+                     -backend-config="storage_account_name=sttfstateavd" \
+                     -backend-config="container_name=tfstate" \
+                     -backend-config="key=$(hostpool_name).tfstate"
+    displayName: 'Terraform Init'
+
+  - script: terraform validate
+    displayName: 'Terraform Validate'
