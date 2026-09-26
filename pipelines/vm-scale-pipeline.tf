@@ -11,7 +11,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  - group: avd-hostpool1-vars   # Variable group with RG, subnet, VM size, creds
+  - group: avd-vm-scale-vars   # Variable group with RG, subnet, VM size, creds
 
 stages:
   - stage: Build
