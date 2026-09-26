@@ -19,3 +19,53 @@ It is designed to be **free-tier friendly** — minimal VM sizes, no public IPs,
 ---
 
 ## 📂 Repo Structure
+├── modules/
+│   ├── resource_group/
+│   ├── network/
+│   ├── hostpool/
+│   ├── workspace/
+│   ├── application_group/
+│   ├── vm/
+│   ├── storage/
+│   ├── keyvault/
+│   └── loganalytics/
+├── pipelines/
+│   ├── infra-pipeline.yml
+│   ├── vm-scale-pipeline.yml
+│   └── templates/
+│       ├── build.yml
+│       ├── plan.yml
+│       ├── apply.yml
+│       └── sonar.yml
+└── README.md
+
+
+---
+
+## 🛠️ Prerequisites
+- Azure free-tier account
+- Azure DevOps project
+- Service connection to Azure
+- Terraform v1.5+
+- Variable group in DevOps (`avd-hostpool1-vars`) with:
+  - `rg_name`
+  - `location`
+  - `vm_names`
+  - `size` (Standard_B1s or B2s)
+  - `admin_username`
+  - `admin_password` (stored in Key Vault)
+
+---
+
+## 🚦 Pipelines
+- **Pipeline 1** → Deploys infra + 1 VM.
+- **Pipeline 2** → Adds more VMs (scale-out).
+
+---
+
+## 📌 Notes
+- All infra is **free-tier friendly**.
+- No public IPs are created.
+- Storage uses **Standard_LRS**.
+- Log Analytics retention = 7 days.
+
