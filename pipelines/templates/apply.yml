@@ -1,0 +1,10 @@
+# ------------------------------------------------------------
+# Template: Terraform Apply
+# Applies plan file to deploy infra
+# ------------------------------------------------------------
+steps:
+  - download: current
+    artifact: tfplan
+
+  - script: terraform apply tfplan
+    displayName: 'Terraform Apply'
